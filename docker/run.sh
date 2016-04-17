@@ -17,7 +17,8 @@ GROUP=nobody
 if [ -e /var/run/docker.sock ]; then
   GROUP=$(ls -l /var/run/docker.sock | awk '{ print $4 }')
 fi
-useradd -g "${GROUP}" collectd-docker-collector
+groupadd -g ${GROUP} docker
+useradd -g docker collectd-docker-collector
 
 exec reefer -t /etc/collectd/collectd.conf.tpl:/tmp/collectd.conf \
   collectd -f -C /tmp/collectd.conf "$@" > /dev/null
